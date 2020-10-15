@@ -1,4 +1,4 @@
-# heroku_server
+# heroku_pixiv_server
 将pixivpy通过fastapi框架部署到heroku上，得到一个免费的pixivapi。
 
 heroku部署时需添加环境变量：pixiv账号和密码，具体请参考源文件里请求的环境变量名称进行设置。
