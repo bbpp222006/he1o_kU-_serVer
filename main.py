@@ -44,11 +44,11 @@ def get_saucenao(request_data:Pic_item):
     new = base64.b64decode(request_data.pic_data.encode())
     results = sauce.from_file(BytesIO(new))  # or from_file()
     best = results[0]  # results sorted by similarity
-    r=requests.get("best.thumbnail")
+    r=requests.get(best.thumbnail)
     preview=str(base64.b64encode(r.content), "utf-8")
-    return {"author":best.author,"title":best.title,"preview":preview}
+    return {"author":best.author,"title":best.title,"preview":preview,"similarity":best.similarity}
 
 
-# if __name__ == '__main__':
-#     import uvicorn
-#     uvicorn.run(app=app,host="0.0.0.0",port=25621,workers=1)
+if __name__ == '__main__':
+    import uvicorn
+    uvicorn.run(app=app,host="0.0.0.0",port=25621,workers=1)
