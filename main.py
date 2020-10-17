@@ -1,11 +1,21 @@
 # main.py
 from fastapi import FastAPI, Query
+from pydantic import BaseModel
 from typing import Optional
 import pixiv_class
+from saucenao_api import SauceNao
+import base64
+from io import BytesIO
+import requests
 
 
 app = FastAPI()
 pixiv=pixiv_class.Pixiv()
+
+
+class Pic_item(BaseModel):
+    pic_data: str= None
+
 
 @app.get("/pixiv")
 def hello(type: Optional[str] = Query("rank", regex="^(illust)|(rank)|(search)$"),
@@ -27,6 +37,17 @@ def hello(type: Optional[str] = Query("rank", regex="^(illust)|(rank)|(search)$"
     elif type=="rank":
         return_message = pixiv.get_rank(rank_mode,rank_page,rank_date)
     return {"message":return_message}
+
+@app.post("/saucenao")
+def get_saucenao(request_data:Pic_item):
+    sauce = SauceNao()
+    new = base64.b64decode(request_data.pic_data.encode())
+    results = sauce.from_file(BytesIO(new))  # or from_file()
+    best = results[0]  # results sorted by similarity
+    r=requests.get("best.thumbnail")
+    preview=str(base64.b64encode(r.content), "utf-8")
+    return {"author":best.author,"title":best.title,"preview":preview}
+
 
 # if __name__ == '__main__':
 #     import uvicorn
