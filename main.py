@@ -47,10 +47,14 @@ def get_saucenao(request_data:Pic_item):
     for result in results[:min(3,len(results))]:
         r = requests.get(result.thumbnail)
         preview = str(base64.b64encode(r.content), "utf-8")
-        return_data.append({"preview":preview,"title":result.title,"url":result.urls[0],"similarity":result.similarity})
+        if result.urls:
+            url=result.urls[0]
+        else:
+            url = result.thumbnail
+        return_data.append({"preview":preview,"title":result.title,"url":url,"similarity":result.similarity})
     return return_data
 
 
-if __name__ == '__main__':
-    import uvicorn
-    uvicorn.run(app=app,host="0.0.0.0",port=25621,workers=1)
+# if __name__ == '__main__':
+#     import uvicorn
+#     uvicorn.run(app=app,host="0.0.0.0",port=25621,workers=1)
