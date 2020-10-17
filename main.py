@@ -40,13 +40,15 @@ def hello(type: Optional[str] = Query("rank", regex="^(illust)|(rank)|(search)$"
 
 @app.post("/saucenao")
 def get_saucenao(request_data:Pic_item):
+    return_data=[]
     sauce = SauceNao()
     new = base64.b64decode(request_data.pic_data.encode())
     results = sauce.from_file(BytesIO(new))  # or from_file()
-    best = results[0]  # results sorted by similarity
-    r=requests.get(best.thumbnail)
-    preview=str(base64.b64encode(r.content), "utf-8")
-    return {"author":best.author,"title":best.title,"preview":preview,"similarity":best.similarity}
+    for result in results[:min(3,len(results))]:
+        r = requests.get(result.thumbnail)
+        preview = str(base64.b64encode(r.content), "utf-8")
+        return_data.append({"preview":preview,"title":result.title,"url":result.urls[0],"similarity":result.similarity})
+    return return_data
 
 
 if __name__ == '__main__':
