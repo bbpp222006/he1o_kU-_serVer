@@ -1,4 +1,4 @@
-from pixivpy3 import *
+from pixivpy import *
 import os
 
 class Pixiv():
@@ -10,7 +10,7 @@ class Pixiv():
         # self.pixiv_api.require_appapi_hosts()
         # self.pixiv_api.set_accept_language('en-us')
         self.pixiv_api = AppPixivAPI()  # Same as AppPixivAPI, but bypass the GFW
-        self.pixiv_api.login(os.environ.get('PIXUSER'), os.environ.get('PIXPASS'))
+        self.pixiv_api.login(os.environ.get('PIXUSER'), os.environ.get('PIXPASS'))  #os.environ.get('PIXUSER'), os.environ.get('PIXPASS')
         self.refresh_pixiv_list()
         return "成功更新当日日榜"
 
