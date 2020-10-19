@@ -9,7 +9,7 @@ from io import BytesIO
 import requests
 
 
-app = FastAPI()
+app = FastAPI(docs_url=None)
 pixiv=pixiv_class.Pixiv()
 
 
@@ -18,7 +18,7 @@ class Pic_item(BaseModel):
 
 
 @app.get("/pixiv")
-def hello(type: Optional[str] = Query("rank", regex="^(illust)|(rank)|(search)$"),
+def hello(type: Optional[str] = Query("rank", regex="^(illust)|(rank)|(search)|(refresh)$"),
     action: Optional[str] = Query(None, regex="^update$"),
     id:Optional[int] = None,
     rank_mode: Optional[str] = Query("week", regex="^(day)|(week)|(month)|(day_male)|(day_female)|(week_original)|(week_rookie)|(day_manga','day_r18)|(day_male_r18)|(day_female_r18)|(week_r18)|(week_r18g)$"),
@@ -36,7 +36,14 @@ def hello(type: Optional[str] = Query("rank", regex="^(illust)|(rank)|(search)$"
         return_message = pixiv.search_with_word(search_word,search_mode,search_order,search_page)
     elif type=="rank":
         return_message = pixiv.get_rank(rank_mode,rank_page,rank_date)
+    elif type=="refresh":
+        ok = pixiv.pixiv_api.auth()
+        if ok:
+            return_message=str(ok.response.access_token)
+        else:
+            return_message="刷新失败"
     return {"message":return_message}
+
 
 @app.post("/saucenao")
 def get_saucenao(request_data:Pic_item):
