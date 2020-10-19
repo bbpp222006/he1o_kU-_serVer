@@ -30,18 +30,18 @@ def hello(type: Optional[str] = Query("rank", regex="^(illust)|(rank)|(search)$"
     search_page: Optional[int] = 1):
     if action=="update":
         return_message =pixiv.api_init()
+    elif action == "refresh":
+        ok = pixiv.pixiv_api.auth()
+        if ok:
+            return_message = str(ok.response.access_token)
+        else:
+            return_message = "刷新失败"
     elif type=="illust":
         return_message=pixiv.get_with_id(id)
     elif type=="search":
         return_message = pixiv.search_with_word(search_word,search_mode,search_order,search_page)
     elif type=="rank":
         return_message = pixiv.get_rank(rank_mode,rank_page,rank_date)
-    elif action=="refresh":
-        ok = pixiv.pixiv_api.auth()
-        if ok:
-            return_message=str(ok.response.access_token)
-        else:
-            return_message="刷新失败"
     return {"message":return_message}
 
 
