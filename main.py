@@ -18,8 +18,8 @@ class Pic_item(BaseModel):
 
 
 @app.get("/pixiv")
-def hello(type: Optional[str] = Query("rank", regex="^(illust)|(rank)|(search)|(refresh)$"),
-    action: Optional[str] = Query(None, regex="^update$"),
+def hello(type: Optional[str] = Query("rank", regex="^(illust)|(rank)|(search)$"),
+    action: Optional[str] = Query(None, regex="^(update)|(refresh)$"),
     id:Optional[int] = None,
     rank_mode: Optional[str] = Query("week", regex="^(day)|(week)|(month)|(day_male)|(day_female)|(week_original)|(week_rookie)|(day_manga','day_r18)|(day_male_r18)|(day_female_r18)|(week_r18)|(week_r18g)$"),
     rank_page: Optional[int] = 1,
@@ -36,7 +36,7 @@ def hello(type: Optional[str] = Query("rank", regex="^(illust)|(rank)|(search)|(
         return_message = pixiv.search_with_word(search_word,search_mode,search_order,search_page)
     elif type=="rank":
         return_message = pixiv.get_rank(rank_mode,rank_page,rank_date)
-    elif type=="refresh":
+    elif action=="refresh":
         ok = pixiv.pixiv_api.auth()
         if ok:
             return_message=str(ok.response.access_token)
