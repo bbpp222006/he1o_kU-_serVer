@@ -1,4 +1,4 @@
-from pixivpy import *
+from pixivpy3 import *
 import os
 
 class Pixiv():
