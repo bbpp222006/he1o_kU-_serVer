@@ -6,10 +6,10 @@ class Pixiv():
         self.api_init()
 
     def api_init(self):
-        self.pixiv_api = ByPassSniApi()  # Same as AppPixivAPI, but bypass the GFW
-        self.pixiv_api.require_appapi_hosts()
-        self.pixiv_api.set_accept_language('en-us')
-        # self.pixiv_api = AppPixivAPI()  # Same as AppPixivAPI, but bypass the GFW
+        # self.pixiv_api = ByPassSniApi()  # Same as AppPixivAPI, but bypass the GFW
+        # self.pixiv_api.require_appapi_hosts()
+        # self.pixiv_api.set_accept_language('en-us')
+        self.pixiv_api = AppPixivAPI()  # Same as AppPixivAPI, but bypass the GFW
         self.pixiv_api.auth(refresh_token="ZaomxM51QJOJc447jq8liIBmxl5UtusP1pdFZio3AzI")  #os.environ.get('PIXUSER'), os.environ.get('PIXPASS')
         self.refresh_pixiv_list()
         print('登录成功')
